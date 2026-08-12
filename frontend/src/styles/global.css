@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #1f2937;
+  background: #f5f7fb;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.brand {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-weight: 700;
+  color: #b42318;
+}
+
+.topbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.content {
+  padding: 24px;
+}
+
+.page {
+  max-width: 1440px;
+}
+
+.import-panel {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.result-stack {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.chart {
+  width: 100%;
+  height: 260px;
+  margin-bottom: 16px;
+}
