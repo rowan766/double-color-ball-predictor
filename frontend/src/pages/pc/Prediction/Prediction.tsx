@@ -1,11 +1,31 @@
 import { Button, Card, Form, Input, Select, Space, Table, Typography, message } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { fetchLatestDraw } from '../../../services/drawApi';
 import { runPrediction } from '../../../services/predictionApi';
 import type { ModelPrediction } from '../../../types/prediction';
 
+function getNextIssueNo(issueNo: string) {
+  const next = Number(issueNo) + 1;
+  return next.toString().padStart(issueNo.length, '0');
+}
+
 export function Prediction() {
+  const [form] = Form.useForm();
   const [predictions, setPredictions] = useState<ModelPrediction[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchLatestDraw()
+      .then((latestDraw) => {
+        form.setFieldsValue({
+          train_until_issue_no: latestDraw.issue_no,
+          target_issue_no: getNextIssueNo(latestDraw.issue_no),
+        });
+      })
+      .catch(() => {
+        message.warning('No latest draw found. Import historical data first.');
+      });
+  }, [form]);
 
   async function handleFinish(values: { target_issue_no: string; train_until_issue_no: string; model_keys: string[] }) {
     try {
@@ -27,12 +47,12 @@ export function Prediction() {
     <div className="page">
       <Typography.Title level={3}>Prediction</Typography.Title>
       <Card>
-        <Form layout="inline" onFinish={handleFinish}>
+        <Form form={form} layout="inline" onFinish={handleFinish}>
           <Form.Item name="target_issue_no" rules={[{ required: true }]} label="Target Issue">
-            <Input placeholder="2024002" />
+            <Input placeholder="Next issue" />
           </Form.Item>
           <Form.Item name="train_until_issue_no" rules={[{ required: true }]} label="Train Until">
-            <Input placeholder="2024001" />
+            <Input placeholder="Latest draw issue" />
           </Form.Item>
           <Form.Item name="model_keys" initialValue={['random_baseline', 'statistical']} label="Models">
             <Select
