@@ -1,3 +1,3 @@
 export function H5Dashboard() {
-  return <div>Dashboard</div>;
+  return <div>仪表盘</div>;
 }

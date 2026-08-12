@@ -1,15 +1,21 @@
-import { BarChartOutlined, DashboardOutlined, ExperimentOutlined, HistoryOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import {
+  BarChartOutlined,
+  DashboardOutlined,
+  ExperimentOutlined,
+  HistoryOutlined,
+  ThunderboltOutlined,
+} from '@ant-design/icons';
 import { Layout, Menu, Typography } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
 const items = [
-  { key: '/dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
+  { key: '/dashboard', icon: <DashboardOutlined />, label: '仪表盘' },
   { key: '/draws', icon: <HistoryOutlined />, label: '历史开奖' },
   { key: '/analysis', icon: <BarChartOutlined />, label: '数据分析' },
   { key: '/prediction', icon: <ThunderboltOutlined />, label: '模型预测' },
-  { key: '/backtest', icon: <ExperimentOutlined />, label: '回测' },
+  { key: '/backtest', icon: <ExperimentOutlined />, label: '回测评估' },
 ];
 
 export function PcLayout() {

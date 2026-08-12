@@ -9,6 +9,14 @@ function getNextIssueNo(issueNo: string) {
   return next.toString().padStart(issueNo.length, '0');
 }
 
+const modelNameMap: Record<string, string> = {
+  random_baseline: '随机基线',
+  statistical: '统计模型',
+  logistic_regression: '逻辑回归',
+  lightgbm: 'LightGBM 模型',
+  xgboost: 'XGBoost 模型',
+};
+
 export function Prediction() {
   const [form] = Form.useForm();
   const [predictions, setPredictions] = useState<ModelPrediction[]>([]);
@@ -23,7 +31,7 @@ export function Prediction() {
         });
       })
       .catch(() => {
-        message.warning('No latest draw found. Import historical data first.');
+        message.warning('未找到最新开奖数据，请先导入历史数据。');
       });
   }, [form]);
 
@@ -37,7 +45,7 @@ export function Prediction() {
       });
       setPredictions(result);
     } catch (error) {
-      message.error(error instanceof Error ? error.message : 'Prediction failed');
+      message.error(error instanceof Error ? error.message : '预测失败');
     } finally {
       setLoading(false);
     }
@@ -45,45 +53,45 @@ export function Prediction() {
 
   return (
     <div className="page">
-      <Typography.Title level={3}>Prediction</Typography.Title>
+      <Typography.Title level={3}>模型预测</Typography.Title>
       <Card>
         <Form form={form} layout="inline" onFinish={handleFinish}>
-          <Form.Item name="target_issue_no" rules={[{ required: true }]} label="Target Issue">
-            <Input placeholder="Next issue" />
+          <Form.Item name="target_issue_no" rules={[{ required: true }]} label="预测期号">
+            <Input placeholder="下一期开奖期号" />
           </Form.Item>
-          <Form.Item name="train_until_issue_no" rules={[{ required: true }]} label="Train Until">
-            <Input placeholder="Latest draw issue" />
+          <Form.Item name="train_until_issue_no" rules={[{ required: true }]} label="训练截止期号">
+            <Input placeholder="最新已开奖期号" />
           </Form.Item>
-          <Form.Item name="model_keys" initialValue={['random_baseline', 'statistical']} label="Models">
+          <Form.Item name="model_keys" initialValue={['random_baseline', 'statistical']} label="模型">
             <Select
               mode="multiple"
               style={{ minWidth: 280 }}
               options={[
-                { value: 'random_baseline', label: 'Random Baseline' },
-                { value: 'statistical', label: 'Statistical' },
-                { value: 'logistic_regression', label: 'Logistic Regression' },
-                { value: 'lightgbm', label: 'LightGBM' },
-                { value: 'xgboost', label: 'XGBoost' },
+                { value: 'random_baseline', label: '随机基线' },
+                { value: 'statistical', label: '统计模型' },
+                { value: 'logistic_regression', label: '逻辑回归' },
+                { value: 'lightgbm', label: 'LightGBM 模型' },
+                { value: 'xgboost', label: 'XGBoost 模型' },
               ]}
             />
           </Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
-            Run
+            运行预测
           </Button>
         </Form>
       </Card>
       <Space direction="vertical" size={16} className="result-stack">
         {predictions.map((prediction) => (
-          <Card key={prediction.model_key} title={prediction.model_key}>
+          <Card key={prediction.model_key} title={modelNameMap[prediction.model_key] ?? prediction.model_key}>
             <Table
               size="small"
               rowKey={(row) => `${row.red_numbers.join('-')}-${row.blue_number}`}
               pagination={false}
               dataSource={prediction.candidate_numbers}
               columns={[
-                { title: 'Red Balls', dataIndex: 'red_numbers', render: (v: number[]) => v.join(', ') },
-                { title: 'Blue Ball', dataIndex: 'blue_number' },
-                { title: 'Score', dataIndex: 'score', render: (v: number) => v?.toFixed(4) },
+                { title: '红球', dataIndex: 'red_numbers', render: (v: number[]) => v.join(', ') },
+                { title: '蓝球', dataIndex: 'blue_number' },
+                { title: '评分', dataIndex: 'score', render: (v: number) => v?.toFixed(4) },
               ]}
             />
           </Card>

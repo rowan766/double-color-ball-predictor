@@ -1,3 +1,3 @@
 export function H5Prediction() {
-  return <div>Prediction</div>;
+  return <div>模型预测</div>;
 }
