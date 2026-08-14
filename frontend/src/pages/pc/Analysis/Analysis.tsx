@@ -29,7 +29,12 @@ export function Analysis() {
               columns={[
                 { title: '号码', dataIndex: 'number' },
                 { title: '出现次数', dataIndex: 'count' },
-                { title: '频率', dataIndex: 'frequency', render: (v: number) => `${(v * 100).toFixed(2)}%` },
+                {
+                  title: '频率',
+                  dataIndex: 'frequency',
+                  sorter: (a, b) => a.frequency - b.frequency,
+                  render: (v: number) => `${(v * 100).toFixed(2)}%`,
+                },
               ]}
             />
           </Card>
@@ -46,7 +51,12 @@ export function Analysis() {
               columns={[
                 { title: '号码', dataIndex: 'number' },
                 { title: '出现次数', dataIndex: 'count' },
-                { title: '频率', dataIndex: 'frequency', render: (v: number) => `${(v * 100).toFixed(2)}%` },
+                {
+                  title: '频率',
+                  dataIndex: 'frequency',
+                  sorter: (a, b) => a.frequency - b.frequency,
+                  render: (v: number) => `${(v * 100).toFixed(2)}%`,
+                },
               ]}
             />
           </Card>
