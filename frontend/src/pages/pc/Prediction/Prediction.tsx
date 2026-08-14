@@ -10,6 +10,7 @@ function getNextIssueNo(issueNo: string) {
 }
 
 const modelNameMap: Record<string, string> = {
+  optimized_ensemble: '优化融合模型',
   random_baseline: '随机基线',
   statistical: '统计模型',
   logistic_regression: '逻辑回归',
@@ -40,7 +41,7 @@ export function Prediction() {
       setLoading(true);
       const result = await runPrediction({
         ...values,
-        candidate_strategy: 'mixed',
+        candidate_strategy: 'optimized',
         candidate_count: 5,
       });
       setPredictions(result);
@@ -62,11 +63,12 @@ export function Prediction() {
           <Form.Item name="train_until_issue_no" rules={[{ required: true }]} label="训练截止期号">
             <Input placeholder="最新已开奖期号" />
           </Form.Item>
-          <Form.Item name="model_keys" initialValue={['random_baseline', 'statistical']} label="模型">
+          <Form.Item name="model_keys" initialValue={['optimized_ensemble']} label="模型">
             <Select
               mode="multiple"
               style={{ minWidth: 280 }}
               options={[
+                { value: 'optimized_ensemble', label: '优化融合模型' },
                 { value: 'random_baseline', label: '随机基线' },
                 { value: 'statistical', label: '统计模型' },
                 { value: 'logistic_regression', label: '逻辑回归' },

@@ -75,6 +75,7 @@ Implemented:
 - Draw History import UI for JSON payloads
 - Number-level feature engineering for red and blue balls
 - Statistical, Logistic Regression, LightGBM, and XGBoost model classes
+- Optimized ensemble model with structured candidate ranking
 - Optional dependency fallback from ML classifiers to the statistical model
 - Persisted prediction runs and model predictions
 - Walk-forward backtesting with result and metric persistence

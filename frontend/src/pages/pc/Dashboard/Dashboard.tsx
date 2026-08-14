@@ -20,7 +20,7 @@ export function Dashboard() {
         </Col>
         <Col span={8}>
           <Card>
-            <Statistic title="模型数量" value={5} />
+            <Statistic title="模型数量" value={6} />
           </Card>
         </Col>
         <Col span={8}>

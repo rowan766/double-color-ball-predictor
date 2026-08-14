@@ -1,6 +1,7 @@
 from app.ml.models.base import BaseLotteryModel
 from app.ml.models.lightgbm_model import LightGBMLotteryModel
 from app.ml.models.logistic_regression_model import LogisticRegressionLotteryModel
+from app.ml.models.optimized_ensemble_model import OptimizedEnsembleModel
 from app.ml.models.random_baseline import RandomBaselineModel
 from app.ml.models.statistical_model import StatisticalModel
 from app.ml.models.xgboost_model import XGBoostLotteryModel
@@ -11,6 +12,7 @@ MODEL_REGISTRY: dict[str, type[BaseLotteryModel]] = {
     LogisticRegressionLotteryModel.model_key: LogisticRegressionLotteryModel,
     LightGBMLotteryModel.model_key: LightGBMLotteryModel,
     XGBoostLotteryModel.model_key: XGBoostLotteryModel,
+    OptimizedEnsembleModel.model_key: OptimizedEnsembleModel,
 }
 
 

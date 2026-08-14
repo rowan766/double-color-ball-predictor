@@ -6,6 +6,7 @@ import type { BacktestMetric } from '../../../types/backtest';
 import type { ModelPrediction } from '../../../types/prediction';
 
 const modelNameMap: Record<string, string> = {
+  optimized_ensemble: '优化融合模型',
   random_baseline: '随机基线',
   statistical: '统计模型',
   logistic_regression: '逻辑回归',
@@ -14,6 +15,7 @@ const modelNameMap: Record<string, string> = {
 };
 
 const modelOptions = [
+  { value: 'optimized_ensemble', label: '优化融合模型' },
   { value: 'statistical', label: '统计模型' },
   { value: 'lightgbm', label: 'LightGBM 模型' },
   { value: 'xgboost', label: 'XGBoost 模型' },
@@ -61,7 +63,7 @@ export function PredictionReview() {
   }) {
     try {
       setBacktesting(true);
-      const result = await runBacktest({ ...values, candidate_strategy: 'top_k' });
+      const result = await runBacktest({ ...values, candidate_strategy: 'optimized' });
       setMetrics(result);
     } catch (error) {
       message.error(error instanceof Error ? error.message : '回测失败');
@@ -145,7 +147,7 @@ export function PredictionReview() {
                     <Form.Item name="initial_train_size" initialValue={100} label="初始训练期数">
                       <InputNumber min={5} />
                     </Form.Item>
-                    <Form.Item name="model_keys" initialValue={['statistical', 'lightgbm', 'xgboost']} label="模型">
+                    <Form.Item name="model_keys" initialValue={['optimized_ensemble', 'statistical', 'lightgbm', 'xgboost']} label="模型">
                       <Select mode="multiple" style={{ minWidth: 280 }} options={modelOptions} />
                     </Form.Item>
                     <Button type="primary" htmlType="submit" loading={backtesting}>

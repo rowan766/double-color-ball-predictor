@@ -4,6 +4,7 @@ import { fetchLeaderboard, runBacktest } from '../../../services/backtestApi';
 import type { BacktestMetric } from '../../../types/backtest';
 
 const modelNameMap: Record<string, string> = {
+  optimized_ensemble: '优化融合模型',
   random_baseline: '随机基线',
   statistical: '统计模型',
   logistic_regression: '逻辑回归',
@@ -28,7 +29,7 @@ export function Backtest() {
   }) {
     try {
       setLoading(true);
-      const result = await runBacktest({ ...values, candidate_strategy: 'top_k' });
+      const result = await runBacktest({ ...values, candidate_strategy: 'optimized' });
       setMetrics(result);
     } catch (error) {
       message.error(error instanceof Error ? error.message : '回测失败');
@@ -54,11 +55,12 @@ export function Backtest() {
           <Form.Item name="initial_train_size" initialValue={100} label="初始训练期数">
             <InputNumber min={5} />
           </Form.Item>
-          <Form.Item name="model_keys" initialValue={['random_baseline', 'statistical']} label="模型">
+          <Form.Item name="model_keys" initialValue={['optimized_ensemble', 'statistical']} label="模型">
             <Select
               mode="multiple"
               style={{ minWidth: 280 }}
               options={[
+                { value: 'optimized_ensemble', label: '优化融合模型' },
                 { value: 'random_baseline', label: '随机基线' },
                 { value: 'statistical', label: '统计模型' },
                 { value: 'logistic_regression', label: '逻辑回归' },

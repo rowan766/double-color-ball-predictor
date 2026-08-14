@@ -3,7 +3,7 @@ from app.ml.prediction.candidate_generator import CandidateGenerator
 
 
 class BacktestRunner:
-    def __init__(self, candidate_strategy: str = "top_k"):
+    def __init__(self, candidate_strategy: str = "optimized"):
         self.candidate_strategy = candidate_strategy
         self.evaluator = BacktestEvaluator()
 

@@ -46,7 +46,7 @@ export function Overview() {
         </Col>
         <Col xs={24} sm={8}>
           <Card className="stat-card">
-            <Statistic title="模型数量" value={5} />
+            <Statistic title="模型数量" value={6} />
           </Card>
         </Col>
         <Col xs={24} sm={8}>

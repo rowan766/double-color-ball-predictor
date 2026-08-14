@@ -9,7 +9,7 @@ from app.repositories.prediction_repository import PredictionRepository
 from app.schemas.prediction import ModelPredictionRead, PredictionRunRequest
 from sqlalchemy.orm import Session
 
-DEFAULT_AUTO_MODEL_KEYS = ["statistical", "lightgbm", "xgboost", "random_baseline", "logistic_regression"]
+DEFAULT_AUTO_MODEL_KEYS = ["optimized_ensemble", "statistical", "lightgbm", "xgboost", "logistic_regression"]
 
 
 def get_next_issue_no(issue_no: str) -> str:
@@ -53,7 +53,7 @@ class PredictionService:
         self.prediction_repository = PredictionRepository(db)
 
     def run_prediction(self, request: PredictionRunRequest, run_type: str = "manual") -> list[ModelPredictionRead]:
-        model_keys = request.model_keys or ["random_baseline"]
+        model_keys = request.model_keys or ["optimized_ensemble"]
         train_draws = self.draw_repository.list_until_issue(request.train_until_issue_no, inclusive=True)
         if not train_draws:
             raise ValueError("No training draws found for train_until_issue_no")
@@ -172,7 +172,7 @@ class PredictionService:
                 target_issue_no=target_issue_no,
                 train_until_issue_no=latest_draw.issue_no,
                 model_keys=DEFAULT_AUTO_MODEL_KEYS,
-                candidate_strategy="mixed",
+                candidate_strategy="optimized",
                 candidate_count=5,
             ),
             run_type="auto",

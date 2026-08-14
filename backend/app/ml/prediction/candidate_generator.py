@@ -1,4 +1,5 @@
 import random
+from itertools import combinations
 
 from app.schemas.prediction import CandidateNumbers
 
@@ -33,6 +34,8 @@ class CandidateGenerator:
                     for _ in range(max(count - 1, 0))
                 ],
             ][:count]
+        if self.strategy == "optimized":
+            return self._optimized(red_probabilities, blue_probabilities, count=count)
         raise ValueError(f"Unsupported candidate strategy: {self.strategy}")
 
     def _top_k(
@@ -81,6 +84,134 @@ class CandidateGenerator:
                 probabilities.items(), key=lambda item: (-item[1], item[0])
             )[:count]
         ]
+
+    def _optimized(
+        self,
+        red_probabilities: dict[int, float],
+        blue_probabilities: dict[int, float],
+        count: int,
+    ) -> list[CandidateNumbers]:
+        red_pool = self._top_numbers(red_probabilities, 15)
+        blue_pool = self._top_numbers(blue_probabilities, 3)
+        candidates: list[CandidateNumbers] = []
+        seen: set[tuple[tuple[int, ...], int]] = set()
+
+        for reds in combinations(sorted(red_pool), 6):
+            if not self._passes_structure_filters(list(reds)):
+                continue
+            for blue_number in blue_pool:
+                self._append_unique_candidate(
+                    candidates,
+                    seen,
+                    list(reds),
+                    blue_number,
+                    red_probabilities,
+                    blue_probabilities,
+                )
+
+        for _ in range(max(count * 60, 300)):
+            sample = self._weighted_sample(red_probabilities, blue_probabilities, locked_reds=[])
+            if self._passes_structure_filters(sample.red_numbers):
+                self._append_unique_candidate(
+                    candidates,
+                    seen,
+                    sample.red_numbers,
+                    sample.blue_number,
+                    red_probabilities,
+                    blue_probabilities,
+                )
+
+        ranked = sorted(
+            candidates,
+            key=lambda candidate: (
+                candidate.score or 0,
+                -sum(candidate.red_numbers),
+                -candidate.blue_number,
+            ),
+            reverse=True,
+        )
+        if not ranked:
+            return [
+                self._weighted_sample(red_probabilities, blue_probabilities, locked_reds=[])
+                for _ in range(count)
+            ]
+        return ranked[:count]
+
+    def _append_unique_candidate(
+        self,
+        candidates: list[CandidateNumbers],
+        seen: set[tuple[tuple[int, ...], int]],
+        red_numbers: list[int],
+        blue_number: int,
+        red_probabilities: dict[int, float],
+        blue_probabilities: dict[int, float],
+    ) -> None:
+        normalized_reds = sorted(red_numbers)
+        key = (tuple(normalized_reds), blue_number)
+        if key in seen:
+            return
+        seen.add(key)
+        candidates.append(
+            CandidateNumbers(
+                red_numbers=normalized_reds,
+                blue_number=blue_number,
+                score=self._score(normalized_reds, blue_number, red_probabilities, blue_probabilities)
+                + self._structure_score(normalized_reds),
+            )
+        )
+
+    def _passes_structure_filters(self, red_numbers: list[int]) -> bool:
+        total = sum(red_numbers)
+        if total < 65 or total > 145:
+            return False
+        odd_count = sum(1 for number in red_numbers if number % 2 == 1)
+        if odd_count < 2 or odd_count > 4:
+            return False
+        big_count = sum(1 for number in red_numbers if number >= 17)
+        if big_count < 2 or big_count > 4:
+            return False
+        zones = [
+            sum(1 for number in red_numbers if 1 <= number <= 11),
+            sum(1 for number in red_numbers if 12 <= number <= 22),
+            sum(1 for number in red_numbers if 23 <= number <= 33),
+        ]
+        if min(zones) == 0 or max(zones) > 3:
+            return False
+        if self._max_consecutive_run(red_numbers) > 2:
+            return False
+        return red_numbers[-1] - red_numbers[0] >= 12
+
+    def _structure_score(self, red_numbers: list[int]) -> float:
+        total = sum(red_numbers)
+        odd_count = sum(1 for number in red_numbers if number % 2 == 1)
+        big_count = sum(1 for number in red_numbers if number >= 17)
+        zones = [
+            sum(1 for number in red_numbers if 1 <= number <= 11),
+            sum(1 for number in red_numbers if 12 <= number <= 22),
+            sum(1 for number in red_numbers if 23 <= number <= 33),
+        ]
+        score = 0.0
+        score += max(0.0, 1 - abs(total - 102) / 50) * 0.18
+        score += (1 - abs(odd_count - 3) / 3) * 0.12
+        score += (1 - abs(big_count - 3) / 3) * 0.12
+        score += (1 - (max(zones) - min(zones)) / 4) * 0.12
+        score += max(0.0, 1 - self._max_gap(red_numbers) / 18) * 0.08
+        score -= max(0, self._max_consecutive_run(red_numbers) - 1) * 0.04
+        return score
+
+    def _max_consecutive_run(self, red_numbers: list[int]) -> int:
+        longest = 1
+        current = 1
+        for previous, number in zip(red_numbers, red_numbers[1:]):
+            if number == previous + 1:
+                current += 1
+                longest = max(longest, current)
+            else:
+                current = 1
+        return longest
+
+    def _max_gap(self, red_numbers: list[int]) -> int:
+        return max(number - previous for previous, number in zip(red_numbers, red_numbers[1:]))
 
     def _score(
         self,
