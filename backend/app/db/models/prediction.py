@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -29,5 +29,8 @@ class ModelPrediction(Base):
     red_probabilities: Mapped[dict] = mapped_column(JSONB, nullable=False)
     blue_probabilities: Mapped[dict] = mapped_column(JSONB, nullable=False)
     candidate_numbers: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
+    best_red_hit_count: Mapped[int | None] = mapped_column(Integer)
+    best_blue_hit: Mapped[bool | None] = mapped_column(Boolean)
+    evaluated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     model_artifact_path: Mapped[str | None] = mapped_column(String(512))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

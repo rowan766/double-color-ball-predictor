@@ -26,21 +26,25 @@ class DrawService:
         created_count = 0
         updated_count = 0
         skipped_count = 0
+        imported_issue_nos: list[str] = []
 
         for payload in sorted(draws, key=lambda item: (item.draw_date, item.issue_no)):
             existing = self.repository.get_by_issue(payload.issue_no)
             if existing is None:
                 self.repository.create(payload)
                 created_count += 1
+                imported_issue_nos.append(payload.issue_no)
             elif overwrite:
                 self.repository.update(existing, payload)
                 updated_count += 1
+                imported_issue_nos.append(payload.issue_no)
             else:
                 skipped_count += 1
 
         self.repository.flush()
         self._recalculate_draw_features()
         self.repository.commit()
+        self._evaluate_imported_draws_and_predict_next(imported_issue_nos)
         latest = self.repository.get_latest()
 
         return LotteryDrawImportResult(
@@ -50,6 +54,18 @@ class DrawService:
             skipped_count=skipped_count,
             latest_issue_no=latest.issue_no if latest else None,
         )
+
+    def _evaluate_imported_draws_and_predict_next(self, issue_nos: list[str]) -> None:
+        if not issue_nos:
+            return
+        from app.services.prediction_service import PredictionService
+
+        prediction_service = PredictionService(self.repository.db)
+        for issue_no in issue_nos:
+            draw = self.repository.get_by_issue(issue_no)
+            if draw is not None:
+                prediction_service.evaluate_predictions_for_draw(draw)
+        prediction_service.run_auto_prediction_after_latest_draw()
 
     def _recalculate_draw_features(self) -> None:
         previous_red_numbers: list[int] | None = None

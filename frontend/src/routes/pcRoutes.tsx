@@ -1,1 +1,1 @@
-export const pcRoutePaths = ['/dashboard', '/draws', '/analysis', '/prediction', '/backtest'];
+export const pcRoutePaths = ['/prediction', '/overview', '/analysis'];

@@ -17,5 +17,10 @@ def run_prediction(request: PredictionRunRequest, db: Session = Depends(get_db))
 
 
 @router.get("/latest")
-def get_latest_prediction():
-    return {"items": []}
+def get_latest_prediction(db: Session = Depends(get_db)):
+    return PredictionService(db).list_latest_predictions()
+
+
+@router.post("/auto-next", response_model=list[ModelPredictionRead])
+def run_auto_next_prediction(db: Session = Depends(get_db)):
+    return PredictionService(db).run_auto_prediction_after_latest_draw()

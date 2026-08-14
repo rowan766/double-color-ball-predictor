@@ -4,8 +4,8 @@
 
 body {
   margin: 0;
-  color: #1f2937;
-  background: #f5f7fb;
+  color: #172033;
+  background: #eef3f8;
   font-family: Inter, "Segoe UI", Arial, sans-serif;
 }
 
@@ -14,29 +14,60 @@ body {
 }
 
 .brand {
-  height: 56px;
+  height: 48px;
   display: flex;
   align-items: center;
   padding: 0 20px;
   font-weight: 700;
-  color: #b42318;
+  color: #c9182b;
+  border-bottom: 1px solid #eef0f4;
 }
 
 .topbar {
-  height: 56px;
+  height: 44px;
   display: flex;
   align-items: center;
   padding: 0 24px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid #e5e7eb;
+  backdrop-filter: blur(8px);
 }
 
 .content {
-  padding: 24px;
+  padding: 12px 16px;
 }
 
 .page {
   max-width: 1440px;
+  margin: 0 auto;
+}
+
+.ant-card {
+  border-color: #e7eaf0;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.ant-card-head {
+  border-bottom-color: #edf0f5;
+}
+
+.compact-page .page-title {
+  margin: 0 0 12px;
+  color: #111827;
+}
+
+.overview-stats .ant-card-body {
+  padding: 12px 16px;
+}
+
+.overview-stats .ant-statistic-title {
+  margin-bottom: 6px;
+}
+
+.overview-stats .ant-statistic-content {
+  font-size: 24px;
+  color: #111827;
 }
 
 .import-panel {
@@ -46,11 +77,164 @@ body {
 
 .result-stack {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 12px;
+}
+
+.data-card .ant-card-head {
+  min-height: 48px;
+}
+
+.data-card .ant-card-body {
+  padding: 12px 16px;
+}
+
+.action-card .ant-card-body {
+  padding: 14px 16px;
+}
+
+.prediction-card .ant-card-head-title {
+  white-space: normal;
+}
+
+.data-card .ant-table-thead > tr > th,
+.data-card .ant-table-tbody > tr > td,
+.prediction-card .ant-table-thead > tr > th,
+.prediction-card .ant-table-tbody > tr > td {
+  padding: 9px 16px;
 }
 
 .chart {
   width: 100%;
   height: 260px;
   margin-bottom: 16px;
+}
+
+.mobile-tabbar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body {
+    background: #f4f6fa;
+  }
+
+  .desktop-sider {
+    display: none;
+  }
+
+  .main-layout {
+    min-width: 0;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 44px;
+    padding: 0 14px;
+  }
+
+  .content {
+    padding: 10px 10px 76px;
+  }
+
+  .compact-page .page-title {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  .overview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .overview-stats .ant-col {
+    flex: none;
+    width: auto;
+    max-width: none;
+  }
+
+  .overview-stats .ant-card-body {
+    padding: 10px;
+  }
+
+  .overview-stats .ant-statistic-title {
+    min-height: 34px;
+    margin-bottom: 2px;
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .overview-stats .ant-statistic-content {
+    font-size: 20px;
+  }
+
+  .result-stack {
+    margin-top: 10px;
+  }
+
+  .data-card .ant-card-head,
+  .ant-card-head {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+
+  .data-card .ant-card-body,
+  .action-card .ant-card-body,
+  .ant-card-body {
+    padding: 10px 12px;
+  }
+
+  .ant-tabs-top > .ant-tabs-nav {
+    margin-bottom: 10px;
+  }
+
+  .ant-form-inline {
+    row-gap: 10px;
+  }
+
+  .ant-form-inline .ant-form-item {
+    width: 100%;
+    margin-inline-end: 0;
+  }
+
+  .ant-form-inline .ant-form-item-control,
+  .ant-form-inline .ant-input,
+  .ant-form-inline .ant-input-number,
+  .ant-form-inline .ant-select,
+  .ant-form-inline button {
+    width: 100%;
+  }
+
+  .prediction-card .ant-card-head-title .ant-space {
+    gap: 4px 10px !important;
+  }
+
+  .chart {
+    height: 220px;
+  }
+
+  .mobile-tabbar {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #e5e9f0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-tabbar .ant-btn {
+    height: 40px;
+    padding: 0 6px;
+    font-size: 12px;
+  }
 }

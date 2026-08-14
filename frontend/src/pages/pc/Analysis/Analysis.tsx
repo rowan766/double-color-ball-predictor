@@ -12,16 +12,19 @@ export function Analysis() {
   }, []);
 
   return (
-    <div className="page">
-      <Typography.Title level={3}>数据分析</Typography.Title>
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
+    <div className="page compact-page">
+      <Typography.Title level={4} className="page-title">
+        数据分析
+      </Typography.Title>
+      <Row gutter={[12, 12]}>
+        <Col xs={24} lg={12}>
           <Card title="红球出现频率">
             <FrequencyBarChart data={summary?.red_frequency ?? []} color="#d92d20" />
             <Table
               size="small"
               rowKey="number"
               pagination={false}
+              scroll={{ x: 360 }}
               dataSource={summary?.red_frequency ?? []}
               columns={[
                 { title: '号码', dataIndex: 'number' },
@@ -31,13 +34,14 @@ export function Analysis() {
             />
           </Card>
         </Col>
-        <Col span={12}>
+        <Col xs={24} lg={12}>
           <Card title="蓝球出现频率">
             <FrequencyBarChart data={summary?.blue_frequency ?? []} color="#1570ef" />
             <Table
               size="small"
               rowKey="number"
               pagination={false}
+              scroll={{ x: 360 }}
               dataSource={summary?.blue_frequency ?? []}
               columns={[
                 { title: '号码', dataIndex: 'number' },

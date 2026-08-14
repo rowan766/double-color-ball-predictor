@@ -1,1 +1,1 @@
-export const h5RoutePaths = ['/dashboard', '/draws', '/analysis', '/prediction', '/backtest'];
+export const h5RoutePaths = ['/prediction', '/overview', '/analysis'];

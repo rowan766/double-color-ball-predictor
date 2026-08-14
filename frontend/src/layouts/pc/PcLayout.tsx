@@ -2,44 +2,58 @@ import {
   BarChartOutlined,
   DashboardOutlined,
   ExperimentOutlined,
-  HistoryOutlined,
-  ThunderboltOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Typography } from 'antd';
+import { Button, Layout, Menu, Typography } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
 const items = [
-  { key: '/dashboard', icon: <DashboardOutlined />, label: '仪表盘' },
-  { key: '/draws', icon: <HistoryOutlined />, label: '历史开奖' },
+  { key: '/prediction', icon: <ExperimentOutlined />, label: '预测评估' },
+  { key: '/overview', icon: <DashboardOutlined />, label: '数据概览' },
   { key: '/analysis', icon: <BarChartOutlined />, label: '数据分析' },
-  { key: '/prediction', icon: <ThunderboltOutlined />, label: '模型预测' },
-  { key: '/backtest', icon: <ExperimentOutlined />, label: '回测评估' },
 ];
 
 export function PcLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const selectedKey =
+    location.pathname === '/dashboard' || location.pathname === '/draws'
+      ? '/overview'
+      : location.pathname === '/backtest'
+        ? '/prediction'
+        : location.pathname;
 
   return (
     <Layout className="app-shell">
-      <Sider width={220} theme="light">
+      <Sider width={220} theme="light" className="desktop-sider">
         <div className="brand">双色球实验平台</div>
         <Menu
           mode="inline"
-          selectedKeys={[location.pathname]}
+          selectedKeys={[selectedKey]}
           items={items}
           onClick={({ key }) => navigate(key)}
         />
       </Sider>
-      <Layout>
+      <Layout className="main-layout">
         <Header className="topbar">
-          <Typography.Text strong>严谨预测、Walk-Forward 回测、随机基线对照</Typography.Text>
+          <Typography.Text strong>双色球预测实验台</Typography.Text>
         </Header>
         <Content className="content">
           <Outlet />
         </Content>
+        <nav className="mobile-tabbar">
+          {items.map((item) => (
+            <Button
+              key={item.key}
+              type={selectedKey === item.key ? 'primary' : 'text'}
+              icon={item.icon}
+              onClick={() => navigate(item.key)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </nav>
       </Layout>
     </Layout>
   );
