@@ -84,6 +84,10 @@ body {
   min-height: 48px;
 }
 
+.data-card .ant-card-extra {
+  padding: 8px 0;
+}
+
 .data-card .ant-card-body {
   padding: 12px 16px;
 }
@@ -107,6 +111,142 @@ body {
   width: 100%;
   height: 260px;
   margin-bottom: 16px;
+}
+
+.lottery-trend-scroll {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid #cfd6e3;
+  background: #fffdf7;
+}
+
+.lottery-trend-board {
+  min-width: 1390px;
+  color: #243042;
+  font-size: 11px;
+}
+
+.trend-header,
+.trend-body {
+  display: grid;
+  grid-template-columns: 72px 858px 416px;
+}
+
+.trend-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff7dc;
+  border-bottom: 1px solid #b8c0cc;
+}
+
+.trend-issue-title,
+.trend-zone {
+  border-right: 1px solid #b8c0cc;
+}
+
+.trend-issue-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  font-weight: 700;
+}
+
+.trend-zone-title {
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.trend-number-row {
+  display: grid;
+  height: 26px;
+  line-height: 26px;
+  border-top: 1px solid #d8cda8;
+}
+
+.trend-number-row span {
+  text-align: center;
+  border-left: 1px solid #d8cda8;
+  font-size: 10px;
+}
+
+.red-text {
+  color: #c9182b;
+}
+
+.blue-text {
+  color: #1d4ed8;
+}
+
+.trend-issue-list {
+  border-right: 1px solid #b8c0cc;
+  background: #f8fbff;
+}
+
+.trend-issue-cell,
+.trend-cell {
+  height: 26px;
+  border-bottom: 1px solid #d8dee9;
+}
+
+.trend-issue-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.trend-grid-panel {
+  position: relative;
+  border-right: 1px solid #b8c0cc;
+}
+
+.trend-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+}
+
+.trend-cell {
+  position: relative;
+  border-left: 1px solid #d8dee9;
+}
+
+.trend-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.trend-ball {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+.red-ball {
+  background: #c9182b;
+}
+
+.blue-ball {
+  background: #1d4ed8;
 }
 
 .mobile-tabbar {
@@ -180,6 +320,18 @@ body {
     padding: 0 12px;
   }
 
+  .data-card .ant-card-head-wrapper {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 10px 0;
+  }
+
+  .data-card .ant-card-extra {
+    width: 100%;
+    margin-inline-start: 0;
+    padding: 8px 0 0;
+  }
+
   .data-card .ant-card-body,
   .action-card .ant-card-body,
   .ant-card-body {
@@ -213,6 +365,10 @@ body {
 
   .chart {
     height: 220px;
+  }
+
+  .lottery-trend-board {
+    min-width: 1390px;
   }
 
   .mobile-tabbar {
